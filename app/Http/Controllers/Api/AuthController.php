@@ -38,27 +38,12 @@ class AuthController extends Controller
             ], 401);
         }
 
-// Clear any resolved password reset requests
-// PasswordResetRequest::where('user_id', $user->id)
-//     ->where('status', 'resolved')
-//     ->update([
-//         'status' => 'completed',
-//         'new_password_plain' => null
-//     ]);
 
         // Generate Token Akses Rahasia menggunakan Sanctum
         $token = $user->createToken('auth_token')->plainTextToken;
 
         // Load relasi cabang agar tersedia di frontend
         $user->load('cabang');
-
-        // Clear any resolved password reset requests
-        PasswordResetRequest::where('user_id', $user->id)
-            ->where('status', 'resolved')
-            ->update([
-                'status' => 'completed',
-                'new_password_plain' => null
-            ]);
 
         return response()->json([
             'status' => 'success',
