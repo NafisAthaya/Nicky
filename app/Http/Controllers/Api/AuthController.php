@@ -38,13 +38,13 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Cek apakah akun karyawan aktif atau diblokir
-        if ($user->is_active == false) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Akun Anda sudah di-lock atau dihapus (sudah tidak terdaftar).'
-            ], 403);
-        }
+// Clear any resolved password reset requests
+// PasswordResetRequest::where('user_id', $user->id)
+//     ->where('status', 'resolved')
+//     ->update([
+//         'status' => 'completed',
+//         'new_password_plain' => null
+//     ]);
 
         // Generate Token Akses Rahasia menggunakan Sanctum
         $token = $user->createToken('auth_token')->plainTextToken;
